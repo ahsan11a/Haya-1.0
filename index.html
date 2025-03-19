@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HAYA AI Chatbot</title>
+    <script type="module">
+        // Import Firebase SDKs
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
+        
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyC7-0dqILTma9ApUKndvPI0G-Vp6rebzyE",
+            authDomain: "turing-course-453708-h5.firebaseapp.com",
+            projectId: "turing-course-453708-h5",
+            storageBucket: "turing-course-453708-h5.firebasestorage.app",
+            messagingSenderId: "364080528567",
+            appId: "1:364080528567:web:5680d6d225184b31ce6132",
+            measurementId: "G-G13Z2KXMDZ"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+    </script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1e1e1e, #111);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 90%;
+            max-width: 500px;
+            background: rgba(30, 30, 30, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 0px 15px rgba(0, 255, 127, 0.7);
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        .chat-box {
+            height: 350px;
+            overflow-y: auto;
+            padding: 15px;
+            background: #252525;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: inset 0px 0px 10px rgba(0, 255, 127, 0.2);
+        }
+        .message {
+            padding: 12px;
+            margin: 8px;
+            border-radius: 15px;
+            max-width: 80%;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .user {
+            background: #1DB954;
+            color: black;
+            align-self: flex-end;
+            text-align: right;
+        }
+        .bot {
+            background: #444;
+            align-self: flex-start;
+        }
+        .input-box {
+            display: flex;
+            margin-top: 10px;
+            background: #333;
+            border-radius: 10px;
+            padding: 5px;
+        }
+        input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+            background: #222;
+            color: white;
+        }
+        button {
+            background: #1DB954;
+            border: none;
+            padding: 12px 15px;
+            margin-left: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #17a74e;
+        }
+        @media (max-width: 600px) {
+            .container {
+                width: 95%;
+                padding: 15px;
+            }
+            .chat-box {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>HAYA AI Chatbot</h2>
+        <div class="chat-box" id="chat-box"></div>
+        <div class="input-box">
+            <input type="text" id="user-input" placeholder="Type a message..." oninput="toggleButton()">
+            <button id="send-button" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    <script>
+        function sendMessage() {
+            let input = document.getElementById("user-input").value;
+            let chatBox = document.getElementById("chat-box");
+            if (input.trim() === "") return;
+            
+            let userMessage = `<div class='message user'><strong>You:</strong> ${input}</div>`;
+            chatBox.innerHTML += userMessage;
+            document.getElementById("user-input").value = "";
+            toggleButton();
+            chatBox.scrollTop = chatBox.scrollHeight;
+            
+            fetch("https://your-railway-app-url/chat", 
+                {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: input })
+            })
+            .then(response => response.json())
+            .then(data => {
+                let botMessage = `<div class='message bot'><strong>Haya:</strong> ${data.response}</div>`;
+                chatBox.innerHTML += botMessage;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            });
+        }
+        
+        function toggleButton() {
+            let input = document.getElementById("user-input").value;
+            let button = document.getElementById("send-button");
+            if (input.trim().length > 0) {
+                button.classList.add("active");
+            } else {
+                button.classList.remove("active");
+            }
+        }
+    </script>
+</body>
+</html>

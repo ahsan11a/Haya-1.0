@@ -1,0 +1,17 @@
+flask
+flask-cors
+firebase-admin
+psycopg2
+torch
+transformers
+langchain
+langchain-openai
+requests
+faiss-cpu
+chromadb
+textblob
+deep-translator
+cryptography
+gtts
+summarizer
+apscheduler
